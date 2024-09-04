@@ -1,0 +1,96 @@
+swagger: '2.0'
+info:
+  version: "1.0.0"
+  title: "API de Cadastro de Empresas"
+  description: "Esta é a API de CRUD para cadastro de empresas."
+
+host: "localhost:5000"
+basePath: "/"
+schemes:
+  - "http"
+
+paths:
+  /empresa:
+    post:
+      summary: "Cria uma nova empresa"
+      description: "Adiciona uma nova empresa à lista"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Dados da empresa"
+          required: true
+          schema:
+            type: "object"
+            properties:
+              cnpj:
+                type: "string"
+              nome_razao:
+                type: "string"
+              nome_fantasia:
+                type: "string"
+              cnae:
+                type: "string"
+      responses:
+        201:
+          description: "Empresa criada com sucesso"
+
+  /empresas:
+    get:
+      summary: "Lista todas as empresas"
+      description: "Retorna uma lista paginada de empresas"
+      parameters:
+        - name: "start"
+          in: "query"
+          type: "integer"
+          required: false
+          description: "Índice inicial da paginação"
+        - name: "limit"
+          in: "query"
+          type: "integer"
+          required: false
+          description: "Número de registros por página"
+      responses:
+        200:
+          description: "Lista de empresas"
+
+  /empresa/{cnpj}:
+    put:
+      summary: "Atualiza uma empresa"
+      description: "Atualiza o Nome Fantasia e CNAE de uma empresa existente"
+      parameters:
+        - name: "cnpj"
+          in: "path"
+          required: true
+          type: "string"
+          description: "CNPJ da empresa"
+        - in: "body"
+          name: "body"
+          description: "Dados atualizados da empresa"
+          required: true
+          schema:
+            type: "object"
+            properties:
+              nome_fantasia:
+                type: "string"
+              cnae:
+                type: "string"
+      responses:
+        200:
+          description: "Empresa atualizada com sucesso"
+        404:
+          description: "Empresa não encontrada"
+
+    delete:
+      summary: "Remove uma empresa"
+      description: "Remove uma empresa da lista com base no CNPJ"
+      parameters:
+        - name: "cnpj"
+          in: "path"
+          required: true
+          type: "string"
+          description: "CNPJ da empresa"
+      responses:
+        200:
+          description: "Empresa removida com sucesso"
+        404:
+          description: "Empresa não encontrada"
