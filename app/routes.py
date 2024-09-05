@@ -66,15 +66,28 @@ def criar_empresa():
 
 @app.route('/empresas', methods=['GET'])
 def listar_empresas():
+    # Parâmetros de paginação e ordenação
     start = int(request.args.get('start', 0))
     limit = int(request.args.get('limit', 10))
-    empresas_paginadas = Empresa.query.offset(start).limit(limit).all()
+    sort = request.args.get('sort', 'id')  # Ordenar por 'id' por padrão
+    dir = request.args.get('dir', 'asc')  # Direção padrão é ascendente
+
+    # Ajustar a direção de ordenação
+    if dir == 'desc':
+        sort_param = getattr(Empresa, sort).desc()
+    else:
+        sort_param = getattr(Empresa, sort).asc()
+
+    # Query com paginação e ordenação
+    empresas_paged = Empresa.query.order_by(sort_param).offset(start).limit(limit).all()
+    
     resultado = [{
         'cnpj': empresa.cnpj,
         'nome_razao': empresa.nome_razao,
         'nome_fantasia': empresa.nome_fantasia,
         'cnae': empresa.cnae
-    } for empresa in empresas_paginadas]
+    } for empresa in empresas_paged]
+
     return jsonify(resultado), 200
 
 @app.route('/empresa/<cnpj>', methods=['PUT'])
