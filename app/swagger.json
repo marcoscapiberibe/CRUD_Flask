@@ -10,7 +10,53 @@
     "schemes": [
         "http"
     ],
+    "securityDefinitions": {
+        "Bearer": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header",
+            "description": "Insira o token no formato: Bearer {token}"
+        }
+    },
+    "security": [
+        {
+            "Bearer": []
+        }
+    ],
     "paths": {
+        "/login": {
+            "post": {
+                "summary": "Realiza login",
+                "description": "Autentica o usuário e retorna um token JWT.",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Credenciais de login",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "username": {
+                                    "type": "string"
+                                },
+                                "password": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Login realizado com sucesso. Retorna o token JWT."
+                    },
+                    "401": {
+                        "description": "Credenciais inválidas."
+                    }
+                }
+            }
+        },
         "/empresa": {
             "post": {
                 "summary": "Cria uma nova empresa",
@@ -44,7 +90,12 @@
                     "201": {
                         "description": "Empresa criada com sucesso"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
             }
         },
         "/empresas": {
@@ -111,7 +162,12 @@
                     "404": {
                         "description": "Empresa não encontrada"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
             },
             "delete": {
                 "summary": "Remove uma empresa",
@@ -132,7 +188,12 @@
                     "404": {
                         "description": "Empresa não encontrada"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
             }
         }
     }
