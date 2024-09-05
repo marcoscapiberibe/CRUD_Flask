@@ -1,19 +1,11 @@
 from flask import Flask, request, jsonify, send_from_directory
-from flask_swagger_ui import get_swaggerui_blueprint
-from models import Empresa, empresas
 import os
+from app import app
+from app.models import Empresa, empresas
 
-app = Flask(__name__)
-
-# Swagger configuration
-SWAGGER_URL = '/swagger'
-API_URL = '/swagger.yaml'
-swaggerui_blueprint = get_swaggerui_blueprint(SWAGGER_URL, API_URL, config={'app_name': "API de Cadastro de Empresas"})
-app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
-
-@app.route('/swagger.yaml')
-def swagger_yaml():
-    return send_from_directory(os.getcwd(), 'swagger.yaml')
+@app.route('/swagger.json')
+def swagger_json():
+    return send_from_directory(os.path.join(os.path.dirname(__file__)), 'swagger.json')
 
 @app.route('/empresa', methods=['POST'])
 def criar_empresa():
@@ -59,6 +51,3 @@ def deletar_empresa(cnpj):
     cnpj = cnpj.replace('.', '').replace('-', '').replace('/', '')
     empresas = [empresa for empresa in empresas if empresa.cnpj.replace('.', '').replace('-', '').replace('/', '') != cnpj]
     return jsonify({'mensagem': 'Empresa removida com sucesso!'}), 200
-
-if __name__ == '__main__':
-    app.run(debug=True)
