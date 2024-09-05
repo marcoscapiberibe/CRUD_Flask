@@ -1,4 +1,9 @@
 import os
 
-DEBUG = True
-SECRET_KEY = os.urandom(24)
+basedir = os.path.abspath(os.path.dirname(__file__))
+
+# Configurações do banco de dados
+SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'app.db')
+SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+SECRET_KEY = os.getenv('SECRET_KEY', 'minha_chave_secreta')

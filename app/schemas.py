@@ -18,6 +18,6 @@ def validate_cnae(cnae):
 # Schema para validar os dados de Empresa
 class EmpresaSchema(Schema):
     cnpj = fields.String(required=True, validate=validate_cnpj)
-    nome_razao = fields.String(required=True, validate=validate.Length(min=3, max=100))
-    nome_fantasia = fields.String(required=True, validate=validate.Length(min=3, max=100))
+    nome_razao = fields.String(required=True, validate=validate.Length(min=3, max=40))
+    nome_fantasia = fields.String(required=True, validate=validate.Length(min=3, max=40))
     cnae = fields.String(required=True, validate=validate_cnae)
