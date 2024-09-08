@@ -95,11 +95,12 @@ def criar_empresa():
 
 @app.route('/empresas', methods=['GET'])
 def listar_empresas():
-    # Parâmetros de paginação e ordenação
+    # Parâmetros de paginação, ordenação e pesquisa
     start = int(request.args.get('start', 0))
     limit = int(request.args.get('limit', 10))
     sort = request.args.get('sort', 'id')  # Ordenar por 'id' por padrão
     dir = request.args.get('dir', 'asc')  # Direção padrão é ascendente
+    search = request.args.get('search', '')  # Termo de pesquisa
 
     # Ajustar a direção de ordenação
     if dir == 'desc':
@@ -107,11 +108,23 @@ def listar_empresas():
     else:
         sort_param = getattr(Empresa, sort).asc()
 
-    # Contar o número total de empresas no banco de dados
-    total_empresas = Empresa.query.count()
+    # Construir a query com possíveis filtros de pesquisa
+    query = Empresa.query
 
-    # Query com paginação e ordenação
-    empresas_paged = Empresa.query.order_by(sort_param).offset(start).limit(limit).all()
+    if search:
+        # Pesquisar nos campos nome_razao, nome_fantasia, cnpj e cnae
+        query = query.filter(
+            (Empresa.nome_razao.ilike(f'%{search}%')) |
+            (Empresa.nome_fantasia.ilike(f'%{search}%')) |
+            (Empresa.cnpj.ilike(f'%{search}%')) |
+            (Empresa.cnae.ilike(f'%{search}%'))
+        )
+
+    # Contar o número total de empresas filtradas
+    total_empresas = query.count()
+
+    # Aplicar paginação e ordenação
+    empresas_paged = query.order_by(sort_param).offset(start).limit(limit).all()
 
     # Montar o resultado da paginação
     resultado = [{
@@ -121,10 +134,11 @@ def listar_empresas():
         'cnae': empresa.cnae
     } for empresa in empresas_paged]
 
-    # Retornar os dados paginados e o número total de empresas
+    # Retornar os dados paginados, o número total de empresas e o termo de pesquisa (se houver)
     return jsonify({
         'empresas': resultado,
-        'total': total_empresas  # Retorna o número total de empresas
+        'total': total_empresas,  # Número total de empresas (com ou sem filtro)
+        'search': search
     }), 200
 
 @app.route('/empresa/<cnpj>', methods=['PUT'])
