@@ -35,7 +35,7 @@ O projeto usa SQLite por padrão. Se desejar usar PostgreSQL ou MySQL, configure
 <li class="has-line-data" data-line-start="37" data-line-end="43">
 <p class="has-line-data" data-line-start="37" data-line-end="39"><strong>Configure as variáveis de ambiente</strong>:<br>
 Crie um arquivo <code>.env</code> com as seguintes variáveis:</p>
-<pre><code class="has-line-data" data-line-start="40" data-line-end="42" class="language-bash">SECRET_KEY=<span class="hljs-string">'sua_chave_secreta'</span>
+<pre><code class="has-line-data" data-line-start="40" data-line-end="42" class="language-bash">SECRET_KEY=<span class="hljs-string">'minha_chave_secreta'</span>
 </code></pre>
 </li>
 <li class="has-line-data" data-line-start="43" data-line-end="50">
