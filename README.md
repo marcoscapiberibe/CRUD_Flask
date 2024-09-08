@@ -140,3 +140,26 @@ Crie um arquivo <code>.env</code> com as seguintes variáveis:</p>
 <li class="has-line-data" data-line-start="138" data-line-end="139"><strong>Documentação Swagger</strong>: A interface do Swagger facilita o teste de todos os endpoints de maneira interativa.</li>
 <li class="has-line-data" data-line-start="139" data-line-end="140"><strong>Banco de Dados</strong>: Para alterar o banco de dados de SQLite para PostgreSQL ou MySQL, modifique a configuração no arquivo <code>config.py</code> e ajuste o URI de conexão de acordo com o banco de dados desejado.</li>
 </ul>
+
+
+<h2 class="code-line" data-line-start=140 data-line-end=141 ><a id="Testes_140"></a>Testes</h2>
+<p class="has-line-data" data-line-start="141" data-line-end="142">Para rodar os testes automatizados, siga os passos abaixo:</p>
+<ol>
+<li class="has-line-data" data-line-start="143" data-line-end="144">Certifique-se de que a API esteja rodando localmente:</li>
+<pre><code class="has-line-data" data-line-start="145" data-line-end="147">python run.py</code></pre>
+
+<li class="has-line-data" data-line-start="148" data-line-end="149">No terminal (abra outro Terminal), dentro do ambiente virtual e na pasta do projeto, rode o comando:</li>
+<pre><code class="has-line-data" data-line-start="150" data-line-end="152">pytest</code></pre>
+
+<li class="has-line-data" data-line-start="153" data-line-end="154">O pytest irá rodar os testes localizados na pasta <code>app/tests/</code> e você verá os resultados no terminal.</li>
+
+<li class="has-line-data" data-line-start="155" data-line-end="156">Lembre-se de que para que os testes de autenticação funcionem, o banco de dados deve estar configurado e um usuário com as credenciais corretas deve existir.</li>
+
+<li class="has-line-data" data-line-start="157" data-line-end="158">Os testes incluem as seguintes verificações:</li>
+<ul>
+  <li class="has-line-data" data-line-start="159" data-line-end="160"><strong>GET</strong> empresas</li>
+  <li class="has-line-data" data-line-start="160" data-line-end="161"><strong>POST</strong> criar empresa</li>
+  <li class="has-line-data" data-line-start="161" data-line-end="162"><strong>PUT</strong> atualizar empresa</li>
+  <li class="has-line-data" data-line-start="162" data-line-end="163"><strong>DELETE</strong> excluir empresa</li>
+</ul>
+</ol>
