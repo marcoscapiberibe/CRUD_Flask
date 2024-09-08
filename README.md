@@ -10,7 +10,7 @@
 <ol>
 <li class="has-line-data" data-line-start="12" data-line-end="18">
 <p class="has-line-data" data-line-start="12" data-line-end="13"><strong>Clone o repositório</strong>:</p>
-<pre><code class="has-line-data" data-line-start="14" data-line-end="17" class="language-bash">git <span class="hljs-built_in">clone</span> https://github.com/seuusuario/nome-do-repositorio.git
+<pre><code class="has-line-data" data-line-start="14" data-line-end="17" class="language-bash">git <span class="hljs-built_in">clone</span> https://github.com/marcoscapiberibe/CRUD_Flask.git
 <span class="hljs-built_in">cd</span> nome-do-repositorio
 </code></pre>
 </li>
