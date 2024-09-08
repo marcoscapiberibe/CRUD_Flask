@@ -10,6 +10,17 @@ from functools import wraps
 
 empresa_schema = EmpresaSchema()
 
+# Configurações para os tempos de expiração dos tokens
+ACCESS_TOKEN_EXPIRES = datetime.timedelta(minutes=30)
+REFRESH_TOKEN_EXPIRES = datetime.timedelta(days=7)
+
+def generate_token(user, expires_in, token_type="access"):
+    return jwt.encode({
+        'user': user,
+        'exp': datetime.datetime.now(datetime.timezone.utc) + expires_in,
+        'type': token_type
+    }, app.config['SECRET_KEY'], algorithm="HS256")
+
 def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
@@ -20,7 +31,9 @@ def token_required(f):
 
         try:
             token = token.split(" ")[1]
-            jwt.decode(token, app.config['SECRET_KEY'], algorithms=["HS256"])
+            decoded_token = jwt.decode(token, app.config['SECRET_KEY'], algorithms=["HS256"])
+            if decoded_token['type'] != 'access':
+                return jsonify({'mensagem': 'Token de acesso inválido!'}), 403
         except jwt.ExpiredSignatureError:
             return jsonify({'mensagem': 'Token expirou, faça login novamente!'}), 403
         except jwt.InvalidTokenError:
@@ -33,17 +46,33 @@ def token_required(f):
 def login():
     dados = request.get_json()
 
-    print(f"SECRET_KEY: {app.config['SECRET_KEY']}, Tipo: {type(app.config['SECRET_KEY'])}")
-
     if dados['username'] == 'admin' and dados['password'] == 'senha654321':
-        token = jwt.encode({
-            'user': dados['username'],
-            'exp': datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(minutes=30)
-        }, str(app.config['SECRET_KEY']), algorithm="HS256")
+        access_token = generate_token(dados['username'], ACCESS_TOKEN_EXPIRES, "access")
+        refresh_token = generate_token(dados['username'], REFRESH_TOKEN_EXPIRES, "refresh")
 
-        return jsonify({'token': token}), 200
+        return jsonify({'access_token': access_token, 'refresh_token': refresh_token}), 200
     else:
         return jsonify({'mensagem': 'Credenciais inválidas!'}), 401
+
+@app.route('/refresh', methods=['POST'])
+def refresh_token():
+    refresh_token = request.get_json().get('refresh_token')
+
+    if not refresh_token:
+        return jsonify({'mensagem': 'Refresh token é necessário!'}), 403
+
+    try:
+        decoded_refresh_token = jwt.decode(refresh_token, app.config['SECRET_KEY'], algorithms=["HS256"])
+        if decoded_refresh_token['type'] != 'refresh':
+            return jsonify({'mensagem': 'Token inválido!'}), 403
+
+        # Gerar um novo access token
+        new_access_token = generate_token(decoded_refresh_token['user'], ACCESS_TOKEN_EXPIRES, "access")
+        return jsonify({'access_token': new_access_token}), 200
+    except jwt.ExpiredSignatureError:
+        return jsonify({'mensagem': 'Refresh token expirou, faça login novamente!'}), 403
+    except jwt.InvalidTokenError:
+        return jsonify({'mensagem': 'Token inválido!'}), 403
 
 @app.route('/swagger.json')
 def swagger_json():
@@ -78,9 +107,13 @@ def listar_empresas():
     else:
         sort_param = getattr(Empresa, sort).asc()
 
+    # Contar o número total de empresas no banco de dados
+    total_empresas = Empresa.query.count()
+
     # Query com paginação e ordenação
     empresas_paged = Empresa.query.order_by(sort_param).offset(start).limit(limit).all()
-    
+
+    # Montar o resultado da paginação
     resultado = [{
         'cnpj': empresa.cnpj,
         'nome_razao': empresa.nome_razao,
@@ -88,7 +121,11 @@ def listar_empresas():
         'cnae': empresa.cnae
     } for empresa in empresas_paged]
 
-    return jsonify(resultado), 200
+    # Retornar os dados paginados e o número total de empresas
+    return jsonify({
+        'empresas': resultado,
+        'total': total_empresas  # Retorna o número total de empresas
+    }), 200
 
 @app.route('/empresa/<cnpj>', methods=['PUT'])
 @token_required
