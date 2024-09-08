@@ -35,7 +35,7 @@ O projeto usa SQLite por padrão. Se desejar usar PostgreSQL ou MySQL, configure
 <li class="has-line-data" data-line-start="37" data-line-end="43">
 <p class="has-line-data" data-line-start="37" data-line-end="39"><strong>Configure as variáveis de ambiente</strong>:<br>
 Crie um arquivo <code>.env</code> com as seguintes variáveis:</p>
-<pre><code class="has-line-data" data-line-start="40" data-line-end="42" class="language-bash">SECRET_KEY=<span class="hljs-string">'sua_chave_secreta'</span>
+<pre><code class="has-line-data" data-line-start="40" data-line-end="42" class="language-bash">SECRET_KEY=<span class="hljs-string">'minha_chave_secreta'</span>
 </code></pre>
 </li>
 <li class="has-line-data" data-line-start="43" data-line-end="50">
@@ -140,3 +140,4 @@ Crie um arquivo <code>.env</code> com as seguintes variáveis:</p>
 <li class="has-line-data" data-line-start="138" data-line-end="139"><strong>Documentação Swagger</strong>: A interface do Swagger facilita o teste de todos os endpoints de maneira interativa.</li>
 <li class="has-line-data" data-line-start="139" data-line-end="140"><strong>Banco de Dados</strong>: Para alterar o banco de dados de SQLite para PostgreSQL ou MySQL, modifique a configuração no arquivo <code>config.py</code> e ajuste o URI de conexão de acordo com o banco de dados desejado.</li>
 </ul>
+
