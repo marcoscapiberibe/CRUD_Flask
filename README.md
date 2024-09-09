@@ -22,7 +22,12 @@
 </li>
 <li class="has-line-data" data-line-start="24" data-line-end="29">
 <p class="has-line-data" data-line-start="24" data-line-end="25"><strong>Instale as dependências</strong>:</p>
-<pre><code class="has-line-data" data-line-start="26" data-line-end="28" class="language-bash">pip install -r requirements.txt
+<pre><code class="has-line-data" data-line-start="26" data-line-end="28" class="language-bash">pip3 install -r requirements.txt
+</code></pre>
+</li>
+<li class="has-line-data" data-line-start="24" data-line-end="29">
+<p class="has-line-data" data-line-start="24" data-line-end="25"><strong>Instale mais essas dependências</strong>:</p>
+<pre><code class="has-line-data" data-line-start="26" data-line-end="28" class="language-bash">pip3 install flask flask-cors flask-migrate flask_swagger_ui marshmallow
 </code></pre>
 </li>
 <li class="has-line-data" data-line-start="29" data-line-end="37">
