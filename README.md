@@ -38,7 +38,7 @@ O projeto usa SQLite por padrão. Se desejar usar PostgreSQL ou MySQL, configure
 </code></pre>
 </li>
 <li class="has-line-data" data-line-start="37" data-line-end="43">
-<p class="has-line-data" data-line-start="37" data-line-end="39"><strong>Configure as variáveis de ambiente</strong>:<br>
+<p class="has-line-data" data-line-start="37" data-line-end="39"><strong>Configure as variáveis de ambiente (necessário caso a API não rode de primeira; caso contrário, você pode ignorar esta etapa)</strong>:<br>
 Crie um arquivo <code>.env</code> com as seguintes variáveis:</p>
 <pre><code class="has-line-data" data-line-start="40" data-line-end="42" class="language-bash">SECRET_KEY=<span class="hljs-string">'minha_chave_secreta'</span>
 </code></pre>
